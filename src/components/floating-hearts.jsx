@@ -57,7 +57,10 @@ export default function FloatingHearts() {
             ease: "easeInOut",
           }}
         >
-          <Heart className={`w-${heart.size} h-${heart.size} ${heart.color} ${heart.fill} opacity-70`} />
+          <Heart 
+            className={`${heart.color} ${heart.fill} opacity-70`}
+            style={{ width: heart.size, height: heart.size }}
+          />
         </motion.div>
       ))}
     </div>

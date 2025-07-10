@@ -7,6 +7,7 @@ import BirthdayCelebration from "@/components/birthday-celebration"
 import Confetti from "@/components/confetti"
 import FloatingHearts from "@/components/floating-hearts"
 import Loader from "@/components/Loader"
+import ErrorBoundary from "@/components/ErrorBoundary"
 import { MoveRight, PartyPopper } from "lucide-react"
 
 export default function Home() {
@@ -14,6 +15,7 @@ export default function Home() {
   const [isLoading, setIsLoading] = useState(true)
   const [bubbles, setBubbles] = useState([])
   const [showForYouBtn, setShowForYouBtn] = useState(false)
+  const [mounted, setMounted] = useState(false)
   const birthdayDate = new Date("April 28, 2025") // Change this date accordingly
   const audioRef = useRef(null)
 
@@ -21,10 +23,22 @@ export default function Home() {
   // const birthdayDate = new Date("2025-04-23T22:03:00+05:30")
 
   useEffect(() => {
+    setMounted(true)
     setTimeout(() => {
       setIsLoading(false)
     }, 1500);
   }, [])
+
+  if (!mounted) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-pink-100 to-purple-100">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-pink-500 mx-auto mb-4"></div>
+          <p className="text-gray-600">Loading birthday celebration...</p>
+        </div>
+      </div>
+    )
+  }
 
   const startCelebration = () => {
     setShowForYouBtn(false)
@@ -57,7 +71,8 @@ export default function Home() {
   }
 
   return (
-    <main className="min-h-screen bg-gradient-to-b from-rose-100 to-purple-100 flex flex-col items-center justify-center p-4 overflow-hidden">
+    <ErrorBoundary>
+      <main className="min-h-screen bg-gradient-to-b from-rose-100 to-purple-100 flex flex-col items-center justify-center p-4 overflow-hidden">
       {isBirthday && <Confetti />}
       <FloatingHearts />
 
@@ -131,5 +146,6 @@ export default function Home() {
         ))}
       </div>
     </main>
+    </ErrorBoundary>
   )
 }
